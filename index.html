@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b5cab">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Temel Fizik">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Temel Fizik</title>
+<style>
+:root{--bg:#f3f6fa;--surface:#fff;--ink:#14202e;--mute:#5a6b7d;--line:#d9e1ea;--accent:#0b5cab;--accent-ink:#fff;--soft:#e1edfa;--mark:#b4540a;--markbg:#fdebd9;--ok:#1f7a45;--okbg:#dff3e7;--bad:#b3261e;--badbg:#fbe3e1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161d;--surface:#17212b;--ink:#e6edf3;--mute:#92a3b3;--line:#2a3846;--accent:#5aa9f0;--accent-ink:#06182a;--soft:#13304d;--mark:#f0a56a;--markbg:#35241a;--ok:#6fcf97;--okbg:#14301f;--bad:#f28b82;--badbg:#3a1b19;color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px max(16px,env(safe-area-inset-right)) 92px max(16px,env(safe-area-inset-left))}
+main{max-width:720px;margin:0 auto}
+h1,h2,h3{margin:0;line-height:1.25;font-weight:700}
+h1{font-size:1.6rem}h2{font-size:1.35rem}h3{font-size:1.02rem}
+html,body{overscroll-behavior-y:none;-webkit-user-select:none;user-select:none}
+.pt,.f,.ex,.res{-webkit-user-select:text;user-select:text}
+body{padding-top:max(16px,env(safe-area-inset-top))}
+.card .ic{flex:none;width:44px;height:44px;border-radius:12px;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:1.1rem}
+.card .tx{min-width:0;flex:1}
+.card .go{color:var(--mute);font-size:1.4rem}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sub{color:var(--mute);margin:6px 0 0}
+.top{margin-bottom:12px}
+.crumb{background:none;border:0;color:var(--accent);padding:8px 0;font-weight:600}
+.grid{display:grid;gap:10px;margin-top:16px}
+.card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card b{font-size:1.05rem;display:block}
+.card small{color:var(--mute)}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px;overflow-wrap:anywhere}
+.pt h3{margin-bottom:4px;color:var(--accent)}
+.label{font:700 .72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin:22px 0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--markbg);color:var(--mark);border-radius:6px;padding:4px 9px;font-size:.88rem;font-weight:600}
+.f{background:var(--soft);border-left:4px solid var(--accent);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:1.05rem;overflow-wrap:anywhere}
+.ex{background:var(--markbg);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:.95rem}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:12px 16px;font-weight:600}
+.btn.ghost{background:none;color:var(--accent);border:1px solid var(--accent)}
+.row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}.row>*{flex:1 1 140px}
+.note{background:var(--markbg);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:.92rem}
+.qa{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
+.qa .qt{font-weight:600}
+.opt{display:block;width:100%;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px}
+.opt.ok{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:600}
+.opt.bad{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.exp{display:none;margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);font-size:.93rem;color:var(--mute)}
+.qa.done .exp{display:block}
+.score{font:700 2.2rem system-ui,sans-serif;color:var(--accent)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--soft)}
+.inp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.inp label{font-size:.8rem;color:var(--mute)}
+.inp input{width:100%;font:inherit;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.res{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:12px}
+.res div{padding:3px 0;overflow-wrap:anywhere}
+nav.bottom{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;gap:4px;padding:8px max(10px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-right));z-index:5}
+nav.bottom button{flex:1;background:none;border:0;padding:10px 2px;border-radius:8px;font-weight:600;font-size:.82rem;color:var(--mute)}
+nav.bottom button.on{background:var(--soft);color:var(--accent)}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<nav class="bottom"><button id="nHome">Konular</button><button id="nQuiz">Test</button><button id="nForm">Formül</button></nav>
+<script>
+/* ===== VERİ ===== */
+const TOPICS=[
+{id:"olcme",t:"Fizik ve Ölçme",sub:"Birimler, SI, yoğunluk, mol, boyut analizi, birim çevirme",
+s:[
+["Fizik nedir?","Fizik <b>deneysel gözlemlere ve nicel ölçümlere</b> dayanır. Amaç, doğa olaylarını yöneten sınırlı sayıdaki temel yasayı bulup deney sonuçlarını önceden tahmin eden teoriler geliştirmektir. Yasalar <b>matematik diliyle</b> ifade edilir (deney ile teori arasında köprü). Deney ve teori uyuşmazsa yeni teori/deney gerekir. <div class='ex'>Örnek: <b>Newton</b> (17. yy) hareket yasaları normal hızlarda doğrudur, ışık hızına yakın hızlarda geçersizdir. <b>Einstein</b>'ın özel görelilik (rölativite) teorisi (1900'ler) ise ışık hızına yakın hızları da açıklar; yani daha genel bir teoridir.</div>"],
+["Temel ve türetilmiş birimler","Mekanikte <b>3 temel nicelik</b> vardır: <b>uzunluk, zaman, kütle</b>. Hız, ivme, kuvvet, enerji gibi diğer tüm nicelikler bunlardan türetilir. Birim sistemleri: <b>CGS</b> (cm, g, s), <b>MKS</b> (m, kg, s), <b>SI</b> (Uluslararası Sistem, Fr. Système International).<table><tr><th>Büyüklük</th><th>Birim</th></tr><tr><td>Hız</td><td>m/s</td></tr><tr><td>İvme</td><td>m/s²</td></tr><tr><td>Kuvvet</td><td>N (Newton) = kg·m/s²</td></tr><tr><td>Enerji</td><td>J (Joule)</td></tr></table>"],
+["SI sistemi (1960)","1960'ta Uluslararası Birim Kurulu metrik sistemi uyarlayıp <b>SI</b>'yı kabul etti. <b>7 temel birim</b>: kütle (kilogram, kg), uzunluk (metre, m), zaman (saniye, s), sıcaklık (Kelvin, K), elektrik akımı (Amper, A), ışık şiddeti (Kandela, cd), madde miktarı (mol). Mekanikte sadece kg, m, s kullanılır. Standart bir birim kolay kabul edilebilir ve güvenilir ölçülebilir olmalı, farklı kişi ve yerlerde aynı sonucu vermelidir. Ön ekler (mili-, nano- gibi) 10'un farklı kuvvetleridir."],
+["Uzunluk standardı","MS 1120'de İngiltere kralı <b>yarda</b>'yı tanımladı (burun ucundan açılan kolun ucuna kadar). 1960'a kadar metre, platin-iridyum çubuktaki iki çizgi arasındaki mesafeydi (duyarlılık yetersiz kaldığı için terk edildi). 1960-70'lerde kripton-86 lambasının turuncu-kırmızı ışığı dalga boyunun <b>1 650 763,73</b> katıydı. <b>Ekim 1983</b>: 1 metre = ışığın boşlukta <b>1/299 792 458 saniyede</b> aldığı yol (ışık hızı = 299 792 458 m/s)."],
+["Kütle standardı","SI kütle birimi <b>kilogram</b>: Fransa'nın <b>Sèvres</b> kentindeki Uluslararası Ağırlık ve Ölçüler Bürosu'nda saklanan <b>platin-iridyum</b> silindirin kütlesidir. 1887'de kabul edildi; alaşım çok kararlı olduğundan değişmemiştir. Silindir 3,9 cm çapında ve 3,9 cm yüksekliğindedir."],
+["Zaman standardı","1960'tan önce saniye <b>ortalama güneş günü</b>nün (1/60)(1/60)(1/24)'ü idi; Dünya'nın dönmesi zamanla değiştiği için iyi bir standart değildi. <b>1967</b>: saniye <b>atom saati</b> ile (sezyum) tanımlandı: <b>sezyum-133</b> atomunun <b>9 192 631 770</b> titreşim yapması için geçen süre. Duyarlılık 10<sup>12</sup>'de 1 (30 000 yılda 1 s'den az sapma). Einstein'dan beri zaman aralığını doğru ölçmek için saatin hareket durumu ve konumu bilinmelidir (GPS uyduları bu yüzden doğru konum verebilir)."],
+["Maddenin yapısı","Madde atomlardan; atom, merkezde <b>çekirdek</b> ve çevresinde dolanan <b>elektronlardan</b> oluşur. Çekirdek <b>proton ve nötronlardan</b>, bunlar da <b>kuarklardan</b> oluşur. Elektron negatif, proton pozitif yüklüdür; nötron yüksüzdür. Aynı cins atomlardan oluşan, fiziksel yolla daha basite ayrılamayan saf madde = <b>element</b>. <b>Atom numarası Z</b> = çekirdekteki proton sayısı; <b>kütle numarası A</b> = proton + nötron sayısı."],
+["Yoğunluk","Birim hacimdeki madde miktarı:<div class='f'>ρ = m / V</div>ρ yoğunluk, m kütle, V hacim; yoğunluk maddenin bir özelliğidir. Örnek: <b>alüminyum 2700 kg/m³</b>."],
+["Mol ve Avogadro sayısı","SI'da madde miktarı <b>mol</b> ile ifade edilir. <b>1 mol</b> = Avogadro sayısı kadar parçacık içerir:<div class='f'>N<sub>A</sub> = 6,022137 × 10<sup>23</sup> parçacık/mol</div>1 mol alüminyum, 1 mol kurşun, 1 mol tebeşir tozunda atom sayısı <b>aynıdır</b>; ama tek tek atomların kütlesi farklıdır. Bir atomun kütlesi:<div class='f'>m<sub>atom</sub> = molar kütle / N<sub>A</sub></div><div class='ex'>Demir (Fe): molar kütle 55,85 g/mol → m<sub>Fe</sub> = 55,85 / (6,022×10<sup>23</sup>) ≈ <b>9,28×10<sup>-23</sup> g/atom</b>. (Slaytta molar kütle yanlışlıkla 5.585 yazılmış, doğrusu 55,85.)</div>"],
+["Boyut analizi","<b>Boyut</b> bir niceliğin fiziksel doğasıdır; birim ise o boyutu ölçmek için seçilen ölçüdür (mesafenin boyutu uzunluktur; birimi m, km, ayak olabilir). Boyut köşeli parantezle gösterilir: uzunluk [L], zaman [T], kütle [M]. <div class='f'>[alan] = [L²] &nbsp; [hız] = [L]/[T] &nbsp; [ivme] = [L]/[T²]</div><b>Kurallar:</b><br>1) Aynı boyutlu nicelikler toplanıp çıkarılabilir (hız+hız = hız; kütle+uzunluk anlamsız).<br>2) Eşitliğin iki tarafı aynı boyutta olmak zorundadır.<br>3) Sade sayıların boyutu yoktur (3 boyutsuzdur); fiziksel sabitlerin boyutu vardır (g: m/s²).<div class='ex'>x = v·t doğru mu? [v][t] = ([L]/[T])·[T] = [L] = [x] ✓.<br>x = ½at² ve x = 4at² ikisi de boyutça doğrudur: [L/T²]·[T²] = [L]. Gerçek formül ½at²'dir. <b>Sonuç: boyut analizi bir formülün doğruluğunu ancak sayısal katsayıya kadar kontrol eder; katsayıyı bulamaz.</b></div>"],
+["Birim çevirme","Çevrim çarpanı kullanılır. 1 mil = 1609 m = 1,609 km; 1 inç = 2,54 cm (inç→cm çarpanı 2,54 cm/inç; cm→inç çarpanı 1/2,54 inç/cm).<div class='ex'>3,2 km = 3,2×1000 = 3200 m.<br>1,6 km/h kaç m/s? 1 km = 1000 m, 1 saat = 3600 s → 1,6×1000/3600 ≈ <b>0,44 m/s</b>.<br>Pratik: <b>km/h ÷ 3,6 = m/s</b> (72 km/h = 20 m/s).</div>"]
+],
+k:["Temel nicelikler: uzunluk, zaman, kütle","SI = 7 temel birim","1 m = ışığın 1/299 792 458 s'de aldığı yol","1 s = Cs-133 için 9 192 631 770 titreşim","1 kg = Sèvres platin-iridyum silindir","ρ = m/V","N_A = 6,022×10²³","Boyut analizi katsayıyı bulamaz"]},
+
+{id:"vektor",t:"Vektörler",sub:"Skaler/vektör, bileşenler, birim vektör, toplama-çıkarma",
+s:[
+["Skaler ve vektör","<b>Skaler</b>: yalnızca büyüklüğü (sayı+birim) vardır: kütle, zaman, sıcaklık, enerji, <b>sürat, yol</b>. <b>Vektör</b>: büyüklük ve yönü vardır: <b>yer değiştirme, hız, ivme, kuvvet</b>. Gösterim A veya A⃗, büyüklük |A|. Skaler sıradan toplanır (3 kg + 2 kg = 5 kg); vektörler yön hesaba katılarak toplanır (3 m doğu + 4 m kuzey ≠ 7 m; bileşke 5 m)."],
+["Bileşenler","A vektörü x ekseniyle θ açısı yapıyorsa:<div class='f'>A<sub>x</sub> = A cosθ &nbsp; A<sub>y</sub> = A sinθ<br>A = √(A<sub>x</sub>² + A<sub>y</sub>²) &nbsp; tanθ = A<sub>y</sub>/A<sub>x</sub></div>Birim vektörlerle <b>A = A<sub>x</sub> i + A<sub>y</sub> j (+ A<sub>z</sub> k)</b>. i, j, k büyüklüğü 1 olan, sırasıyla x, y, z yönünü gösteren birim vektörlerdir. A<sub>x</sub> θ'ya komşu, A<sub>y</sub> karşı kenardır; açı x ekseninden ölçülür, 2. ve 3. bölgede işaretlere dikkat. <div class='ex'>A = 10, θ = 30° → A<sub>x</sub> = 8,66; A<sub>y</sub> = 5,00.</div>"],
+["Birim vektör","Büyüklüğü 1, A ile aynı yönlü vektör: <div class='f'>â = A / |A|</div>Sadece yön belirtir. Her vektör A = |A| â (büyüklük × yön). <div class='ex'>A = 3i + 4j → |A| = 5 → â = 0,6 i + 0,8 j.</div>"],
+["Geometrik toplama","<b>Uç uca ekleme</b>: B'nin başı A'nın ucuna konur, R = A + B, A'nın başından B'nin ucuna çizilir. <b>Paralelkenar</b>: A ve B aynı noktadan çizilir, köşegen R'dir. Özellikler: değişme A+B = B+A; birleşme (A+B)+C = A+(B+C); sıfır vektör A+0 = A; zıt vektör A+(−A) = 0. <b>Üçgen eşitsizliği</b>: |A−B| ≤ |A+B| ≤ A+B (büyüklükler doğrudan toplanmaz; en büyük bileşke aynı yönlüyken)."],
+["Bileşen yöntemiyle toplama","Her vektör bileşenlerine ayrılır, bileşenler ayrı ayrı toplanır:<div class='f'>R<sub>x</sub> = A<sub>x</sub>+B<sub>x</sub> &nbsp; R<sub>y</sub> = A<sub>y</sub>+B<sub>y</sub><br>R = √(R<sub>x</sub>² + R<sub>y</sub>²) &nbsp; tanθ = R<sub>y</sub>/R<sub>x</sub></div><b>Çıkarma</b>: A − B = A + (−B); (A<sub>x</sub>−B<sub>x</sub>) i + (A<sub>y</sub>−B<sub>y</sub>) j. <b>Skalerle çarpma</b>: cA büyüklüğü |c|A; c>0 aynı yön, c<0 zıt yön; cA = (cA<sub>x</sub>) i + (cA<sub>y</sub>) j (3A = 6i+9j için A = 2i+3j)."],
+["Çözümlü örnekler","<div class='ex'><b>1)</b> A = 3i+4j, B = 2i−j (N): R = 5i+3j; |R| = √34 ≈ 5,83 N; θ = arctan(3/5) ≈ 31°.</div><div class='ex'><b>2)</b> 4 m doğu, 3 m kuzey, 1 m batı: R<sub>x</sub> = 4−1 = 3, R<sub>y</sub> = 3 → R = √18 ≈ 4,24 m, 45° (kuzeydoğu).</div><div class='ex'><b>3)</b> Doğuya 6 N, kuzeye 8 N: R = √(36+64) = 10 N; tanθ = 8/6; θ ≈ 53° (3-4-5 üçgeni).</div><div class='ex'><b>4)</b> Uçak havaya göre 200 km/h kuzeye, rüzgâr 50 km/h doğuya: V = √(50²+200²) = √42500 ≈ 206 km/h; θ = arctan(50/200) ≈ 14° (kuzeyden doğuya sapma).</div>"]
+],
+k:["Skaler: kütle, zaman, sürat, yol, enerji","Vektör: yer değiştirme, hız, ivme, kuvvet","A_x = A cosθ, A_y = A sinθ","â = A/|A|","Bileşenler ayrı ayrı toplanır","|A−B| ≤ |A+B| ≤ A+B"]},
+
+{id:"carpim",t:"Vektör Çarpımları",sub:"Skaler (nokta) ve vektörel (çapraz) çarpım, iş, tork",
+s:[
+["Skaler (nokta) çarpım","Sonuç <b>bir sayıdır</b> (skaler).<div class='f'>A · B = A B cosθ = A<sub>x</sub>B<sub>x</sub> + A<sub>y</sub>B<sub>y</sub> + A<sub>z</sub>B<sub>z</sub></div>θ vektörler arasındaki açıdır. Fiziksel kullanım: <b>iş W = F · d</b>, <b>güç P = F · v</b>. Özellikler: <b>değişmelidir</b> (A·B = B·A); dik vektörlerde (θ = 90°) <b>A·B = 0</b>; paralelde A·B = AB; i·i = j·j = k·k = 1, i·j = 0. İki vektör arasındaki açı: cosθ = A·B / (|A||B|).<div class='ex'>A = 2i+3j, B = 4i−j: A·B = 8−3 = 5; |A| = √13, |B| = √17 → cosθ = 5/√221 ≈ 0,336 → θ ≈ 70°.<br>A = i+j, B = j+k: A·B = 1, |A| = |B| = √2 → cosθ = 1/2 → θ = 60°.</div>"],
+["Vektörel (çapraz) çarpım","Sonuç <b>bir vektördür</b>: C = A × B.<div class='f'>|A × B| = A B sinθ</div>Büyüklük, A ve B'nin oluşturduğu <b>paralelkenarın alanıdır</b> (üçgenin alanı bunun yarısı). Yön: hem A'ya hem B'ye diktir, <b>sağ el kuralı</b>: dört parmak A'dan B'ye kıvrılırken başparmak C'yi gösterir. Fiziksel kullanım: <b>tork τ = r × F</b>, <b>manyetik kuvvet F = q v × B</b>. Özellikler: <b>değişmeli değildir</b>, A×B = −(B×A); paralel vektörlerde A×B = 0; <b>i×j = k, j×k = i, k×i = j</b>."],
+["Determinant ile hesap","<div class='f'>A × B = (A<sub>y</sub>B<sub>z</sub> − A<sub>z</sub>B<sub>y</sub>) i − (A<sub>x</sub>B<sub>z</sub> − A<sub>z</sub>B<sub>x</sub>) j + (A<sub>x</sub>B<sub>y</sub> − A<sub>y</sub>B<sub>x</sub>) k</div>Aynı sonuç 3×3 determinantla (ilk satır i, j, k) bulunur. <div class='ex'>A = (1,2,3), B = (4,5,6): i(12−15) − j(6−12) + k(5−8) = <b>−3i + 6j − 3k</b>. Kontrol: A·(A×B) = −3+12−9 = 0 (sonuç A'ya diktir).<br>A = 2i+3j, B = 4i+j: A×B = (2·1 − 3·4) k = −10k (büyüklük 10, yön −z, sayfa içine).<br>A = 3i, B = 2i+2j: A×B = 6k → paralelkenar alanı 6 birim².</div>"],
+["Fiziksel örnekler","<div class='ex'><b>İş:</b> F = 10 N, yatayla 60°, d = 5 m: W = 10·5·cos60° = <b>25 J</b> (kuvvet harekete dik olsaydı W = 0).</div><div class='ex'><b>Güç:</b> F = 20i N, v = 3i+4j m/s: P = 20·3 + 0·4 = <b>60 W</b> (hızın y bileşeni kuvvete dik, katkısı yok).</div><div class='ex'><b>Tork:</b> r = 0,5 m, F = 20 N, dik: τ = rF sinθ = 0,5·20·1 = <b>10 N·m</b> (kuvvet kola paralelse tork sıfır). Eğik: r = 2 m, F = 10 N, θ = 30° → τ = 2·10·0,5 = 10 N·m (yalnızca kola dik bileşen F sinθ tork yapar).</div><div class='ex'><b>Manyetik kuvvet:</b> q = 1 C, v = 3i, B = 2j: F = q v×B = 6(i×j) = <b>6k N</b>; kuvvet hız ve alana dik olduğu için iş yapmaz.</div>"],
+["Karşılaştırma","<table><tr><th></th><th>Skaler çarpım</th><th>Vektörel çarpım</th></tr><tr><td>Sonuç</td><td>sayı</td><td>vektör</td></tr><tr><td>Formül</td><td>AB cosθ</td><td>AB sinθ</td></tr><tr><td>Sıra</td><td>değişmeli</td><td>A×B = −B×A</td></tr><tr><td>Sıfır olur</td><td>dik ise</td><td>paralel ise</td></tr><tr><td>Örnek</td><td>iş, güç</td><td>tork, manyetik kuvvet</td></tr></table>"]
+],
+k:["A·B = AB cosθ → sayı, dikte 0","A×B = AB sinθ → vektör, paralelde 0","A×B = −B×A","i×j = k, j×k = i, k×i = j","İş W = F·d; tork τ = r×F","Sağ el kuralı"]},
+
+{id:"kinematik",t:"Tek Boyutta Hareket (Kinematik)",sub:"Konum, hız, ivme, sabit ivmeli hareket, serbest düşme, grafikler",
+s:[
+["Konum, yer değiştirme, yol","Kinematik hareketi nedenlerini (kuvvet) incelemeden tanımlar. 1 boyutta konum x(t) (m). <b>Yer değiştirme</b> Δx = x₂ − x₁ (vektörel, işareti yönü verir). <b>Yol</b> alınan toplam uzunluktur (skaler, hep pozitif). Gidip başlangıca dönen cismin yer değiştirmesi 0'dır, yolu 0 değildir."],
+["Hız ve sürat","<b>Ortalama hız</b> v<sub>ort</sub> = Δx/Δt (vektörel, m/s). <b>Anlık hız</b> v = dx/dt = konum-zaman grafiğinin o andaki <b>eğimi</b>. <b>Ortalama sürat</b> = toplam yol / toplam zaman (skaler, negatif olamaz).<div class='ex'>100 m'yi 20 s'de giden → 5 m/s.<br><b>Gidiş-dönüş:</b> gidişte 60 km/h, dönüşte 40 km/h → ortalama sürat 2d/(d/60 + d/40) = <b>48 km/h</b> (aritmetik ortalama 50 değildir); ortalama <b>hız</b> 0'dır.</div>"],
+["Konum-zaman grafiği","Eğim = anlık hız. Yatay çizgi = hız sıfır (durgun). Doğrusal eğim = sabit hız; eğrilik = ivme. Eğim negatifse cisim −x yönünde gider."],
+["İvme","<b>Ortalama ivme</b> a<sub>ort</sub> = Δv/Δt = (v₂−v₁)/(t₂−t₁), birim m/s². <b>Anlık ivme</b> a = dv/dt = hız-zaman grafiğinin eğimi. v ve a <b>aynı işaretliyse hızlanır, zıt işaretliyse yavaşlar</b>. v-t grafiğinin altında kalan <b>alan yer değiştirmedir</b>. Sabit ivmede v-t grafiği doğrudur; alan yamuk alanıdır: Δx = ½(v₀+v)t."],
+["Sabit ivmeli hareket denklemleri","<div class='f'>1) v = v₀ + a t<br>2) x = x₀ + v₀ t + ½ a t²<br>3) v² = v₀² + 2a Δx<br>4) Δx = ½ (v₀ + v) t</div>Yalnızca <b>ivme sabitken</b> geçerli. <b>Hangi denklem?</b> Δx yoksa 1; v yoksa 2; <b>t yoksa 3</b>; a yoksa 4.<br><b>Problem çözme adımları:</b> şekil çiz ve pozitif yönü seç → bilinenleri işaretleriyle yaz → eksik değişkene göre denklem seç → birimleri SI'ya çevir (km/h ÷ 3,6 = m/s) → sonucu mantıkla kontrol et."],
+["Çözümlü örnekler","<div class='ex'><b>Bisikletli:</b> v₀ = 5 m/s, a = 2 m/s², 4 s: v = 5+8 = <b>13 m/s</b>; Δx = 20+16 = <b>36 m</b> (kontrol: ort. hız 9 × 4 = 36).</div><div class='ex'><b>Yetişme:</b> A sabit 20 m/s; B durgun başlar, a = 2. 20t = ½·2·t² → t = <b>20 s</b>, x = <b>400 m</b>; B'nin hızı 40 m/s.</div><div class='ex'><b>Frenleme:</b> v₀ = 20, a = −4, v = 0: t = 20/4 = <b>5 s</b>; Δx = (0−400)/(−8) = <b>50 m</b>.</div>"],
+["Serbest düşme ve düşey atış","Hava direnci yoksa tüm cisimler <b>g ≈ 9,8 m/s²</b> (aşağı) ile hareket eder. <b>Serbest bırakma</b>: v₀ = 0; t = √(2h/g), v = gt (h = 20 m, g=10 → t = 2 s, v = 20 m/s). <b>Yukarı atış</b> (yukarı +, a = −g): tepede v = 0; tepe zamanı t = v₀/g; maksimum yükseklik h = v₀²/2g; havada kalma 2v₀/g; aynı yükseklikte çıkış ve iniş hızlarının büyüklüğü eşit.<div class='ex'>v₀ = 20 m/s, g = 9,8: tepe 2,04 s, h = 20,4 m, dönüş 4,08 s.<br>v₀ = 30, g = 10: tepe 3 s, h = 45 m, havada kalma 6 s.<br>v₀ = 20, g = 10, h = 15 m: 15 = 20t − 5t² → t = <b>1 s ve 3 s</b>.</div>"],
+["Sık yapılan hatalar","• Sürat–hız ve yol–yer değiştirmeyi karıştırmak.<br>• Yön/işaret seçmeden denklem yazmak (yukarı +, aşağı −).<br>• Vektör büyüklüklerini doğrudan toplamak.<br>• Vektörel çarpımda sırayı değiştirmek (işaret döner).<br>• Sabit ivme denklemlerini ivme değişirken kullanmak."]
+],
+k:["Yer değiştirme: vektör; yol: skaler","x-t eğimi = hız; v-t eğimi = ivme","v-t alanı = yer değiştirme","v = v₀+at; x = x₀+v₀t+½at²; v² = v₀²+2aΔx","Tepede v = 0; kalış süresi 2v₀/g","km/h ÷ 3,6 = m/s"]}
+];
+
+/* soru: [metin, [şıklar], doğruİndeks, açıklama] */
+const Q={
+olcme:[
+["Mekanikte üç temel nicelik hangisidir?",["Hız, ivme, kuvvet","Uzunluk, zaman, kütle","Enerji, güç, iş","Kütle, hız, zaman"],1,"Mekanikte temel nicelikler uzunluk [L], zaman [T] ve kütle [M]'dir; diğerleri bunlardan türetilir."],
+["SI sisteminde kaç temel birim vardır?",["3","5","7","9"],2,"Kg, m, s, K, A, cd, mol = 7 temel birim."],
+["1983'te 1 metre nasıl tanımlanmıştır?",["Platin-iridyum çubuktaki iki çizgi arası","Işığın boşlukta 1/299 792 458 s'de aldığı yol","Kripton-86 ışığı dalga boyunun 1 650 763,73 katı","Yarda'nın iki katı"],1,"Ekim 1983 tanımı: ışığın boşlukta 1/299 792 458 saniyede aldığı yol."],
+["Saniye bugün neye göre tanımlanır?",["Ortalama güneş günü","Sarkaç periyodu","Sezyum-133 atomunun 9 192 631 770 titreşimi","Kripton-86 lambası"],2,"1967'den beri atom saati (sezyum-133)."],
+["Kilogram standardı nerede saklanan nesnedir?",["Sèvres'te platin-iridyum silindir","Londra'da çelik küp","Paris'te altın çubuk","Cenevre'de su dolu kap"],0,"Fransa Sèvres, Uluslararası Ağırlık ve Ölçüler Bürosu; platin-iridyum silindir (1887)."],
+["Yoğunluğun ifadesi hangisidir?",["ρ = V/m","ρ = m/V","ρ = m·V","ρ = m/V²"],1,"Yoğunluk birim hacimdeki kütledir: ρ = m/V."],
+["Alüminyumun yoğunluğu 2700 kg/m³ ise 10 kg alüminyumun hacmi yaklaşık kaç m³'tür?",["3,7×10⁻³","2,7×10⁴","0,27","27"],0,"V = m/ρ = 10/2700 ≈ 3,7×10⁻³ m³."],
+["Avogadro sayısı yaklaşık kaçtır?",["6,022×10²³ /mol","6,022×10⁻²³ /mol","3×10⁸ /mol","9,8 /mol"],0,"N_A = 6,022137×10²³ parçacık/mol."],
+["1 mol alüminyum ile 1 mol kurşunda hangisi aynıdır?",["Kütle","Atom sayısı","Hacim","Yoğunluk"],1,"Her ikisinde de N_A kadar atom vardır; kütleleri farklıdır."],
+["Bir atomun kütlesi nasıl bulunur?",["Molar kütle × N_A","Molar kütle / N_A","N_A / molar kütle","Molar kütle + N_A"],1,"m_atom = molar kütle / N_A."],
+["Atom numarası Z neyi gösterir?",["Proton + nötron sayısı","Nötron sayısı","Proton sayısı","Elektron + nötron"],2,"Z = proton sayısı; kütle numarası A = proton + nötron."],
+["İvmenin boyutu hangisidir?",["[L]/[T]","[L]/[T²]","[L][T]","[M][L]/[T]"],1,"a = hız/zaman = [L]/[T²]."],
+["Hangi işlem boyutsal olarak anlamsızdır?",["hız + hız","uzunluk + uzunluk","kütle + uzunluk","zaman + zaman"],2,"Farklı boyutlar toplanamaz."],
+["x = v·t² ifadesi boyutça doğru mudur? (x konum, v hız, t zaman)",["Evet","Hayır, [L] ≠ [L][T]","Evet, katsayı yoksa","Boyut analizi uygulanamaz"],1,"[v][t²] = [L]/[T]·[T²] = [L][T] ≠ [L]."],
+["Boyut analizi hakkında doğru olan hangisidir?",["Sayısal katsayıyı da bulur","Formülün doğruluğunu katsayıya kadar kontrol eder","Sadece birimleri değiştirir","Kütle hesabında kullanılmaz"],1,"x = ½at² ve x = 4at² ikisi de boyutça uyumludur; katsayı boyut analiziyle bulunamaz."],
+["72 km/h kaç m/s'dir?",["7,2","20","25","72"],1,"72/3,6 = 20 m/s."],
+["Kuvvet birimi Newton aşağıdakilerden hangisine eşittir?",["kg·m/s","kg·m/s²","kg/m·s","J/s"],1,"F = m·a → kg·m/s²."]
+],
+vektor:[
+["Aşağıdakilerden hangisi skalerdir?",["Hız","İvme","Sürat","Kuvvet"],2,"Sürat yönsüz büyüklüktür; hız, ivme, kuvvet vektördür."],
+["3 m doğuya + 4 m kuzeye giden cismin yer değiştirmesinin büyüklüğü?",["7 m","5 m","1 m","12 m"],1,"√(9+16) = 5 m."],
+["A = 10 birim, x ekseniyle 30°. A_x ve A_y?",["5 ve 8,66","8,66 ve 5","10 ve 0","7 ve 7"],1,"A_x = 10cos30° = 8,66; A_y = 10sin30° = 5."],
+["A = 3i + 4j vektörünün birim vektörü?",["3i + 4j","0,6i + 0,8j","0,8i + 0,6j","i + j"],1,"|A| = 5 → â = A/5 = 0,6i + 0,8j."],
+["A = 2i + 5j ve B = −4i + j ise A + B?",["−2i + 6j","6i + 4j","−2i + 4j","2i + 6j"],0,"(2−4) i + (5+1) j = −2i + 6j; |R| = √40 ≈ 6,32."],
+["A = 3i + 2j, B = i + 4j için A − B?",["4i + 6j","2i − 2j","2i + 2j","−2i + 2j"],1,"(3−1) i + (2−4) j = 2i − 2j."],
+["A = 2i − 3j, B = −i + 5j için 2A + B?",["3i − j","3i + j","4i − j","5i + 2j"],0,"2A = 4i − 6j; +B → 3i − j."],
+["Doğuya 6 N ve kuzeye 8 N kuvvetin bileşkesi?",["14 N","10 N","2 N","48 N"],1,"√(36+64) = 10 N."],
+["Uçak havaya göre 200 km/h kuzeye, rüzgâr 50 km/h doğuya. Yere göre hız?",["250 km/h","150 km/h","≈ 206 km/h","≈ 14 km/h"],2,"√(50²+200²) = √42500 ≈ 206 km/h."],
+["50 N'luk kuvvet x ekseniyle 37° yapıyor (cos37° ≈ 0,8). Bileşenleri?",["40 N ve 30 N","30 N ve 40 N","25 N ve 25 N","50 N ve 0"],0,"F_x = 50·0,8 = 40; F_y = 50·0,6 = 30."],
+["|A| = 3 ve |B| = 4 ise |A + B| aşağıdakilerden hangisi OLAMAZ?",["1","5","7","8"],3,"1 ≤ |A+B| ≤ 7 (üçgen eşitsizliği); 8 olamaz."],
+["Vektör toplamının hangi özelliği doğrudur?",["A + B ≠ B + A","A + B = B + A","A + (−A) = A","A + 0 = 0"],1,"Vektör toplamı değişmelidir."],
+["c < 0 için cA vektörü A'ya göre nasıldır?",["Aynı yönlü","Zıt yönlü, büyüklüğü |c|A","Dik","Sıfır"],1,"Negatif skaler yönü ters çevirir; büyüklük |c|A."],
+["Bir uçak 100 km doğuya, sonra 100 km kuzeye gidiyor. Yer değiştirmesi?",["200 km","≈ 141 km kuzeydoğu","100 km","0"],1,"√(100²+100²) ≈ 141 km, kuzeydoğu."]
+],
+carpim:[
+["A·B ne tür bir niceliktir?",["Vektör","Skaler","Tensör","Birim vektör"],1,"Nokta çarpımın sonucu sayıdır."],
+["A × B ne tür bir niceliktir ve nasıl yönlenir?",["Skaler","Vektör, A ve B'ye dik","Vektör, A'ya paralel","Skaler, yönsüz"],1,"Sonuç A ve B'nin oluşturduğu düzleme dik bir vektördür (sağ el kuralı)."],
+["Dik iki vektörün skaler çarpımı?",["AB","1","0","−AB"],2,"cos90° = 0."],
+["Paralel iki vektörün vektörel çarpımı?",["AB","0","1","A+B"],1,"sin0° = 0."],
+["i × j = ?",["k","−k","i","0"],0,"i×j = k, j×k = i, k×i = j."],
+["Hangisi doğrudur?",["A×B = B×A","A×B = −B×A","A·B = −B·A","A·B ≠ B·A"],1,"Vektörel çarpım değişmeli değildir, sıra değişince işaret döner."],
+["A = 2i + 3j, B = 4i − j için A·B?",["5","11","−5","8"],0,"2·4 + 3·(−1) = 5."],
+["A = 2i + 3j, B = 4i + j için A × B?",["−10k","10k","5k","−5k"],0,"(2·1 − 3·4) k = −10 k."],
+["A = (1,2,3), B = (4,5,6) için A × B?",["−3i + 6j − 3k","3i − 6j + 3k","−3i − 6j − 3k","0"],0,"i(12−15) − j(6−12) + k(5−8) = −3i + 6j − 3k."],
+["A = 2i − j + 3k, B = i + 4j − 2k için A·B?",["−8","8","0","−10"],0,"2 − 4 − 6 = −8."],
+["Aynı A ve B için A × B?",["−10i + 7j + 9k","10i − 7j − 9k","−10i − 7j + 9k","0"],0,"(−1·−2 − 3·4) i − (2·−2 − 3·1) j + (2·4 − (−1)·1) k = −10i + 7j + 9k."],
+["F = 10 N yatayla 60° açıyla, cisim yatayda 5 m gidiyor. İş?",["50 J","25 J","43,3 J","0"],1,"W = 10·5·cos60° = 25 J."],
+["5 N'luk kuvvet 4 m'lik yer değiştirmeye dik. İş?",["20 J","0 J","9 J","1 J"],1,"cos90° = 0 → W = 0."],
+["r = 0,5 m, F = 20 N kola dik. Tork?",["10 N·m","40 N·m","0","20 N·m"],0,"τ = rF sinθ = 0,5·20·1 = 10 N·m."],
+["F = 20i N, v = 3i + 4j m/s. Güç?",["100 W","60 W","80 W","140 W"],1,"P = F·v = 20·3 = 60 W."],
+["A = 3i, B = 2i + 2j kenarlı paralelkenarın alanı?",["6","12","3","10"],0,"|A×B| = |3·2 − 0| = 6."],
+["A = 3i + 4j, B = 4i − 3j için |A × B| ve A·B?",["25 ve 0","0 ve 25","7 ve 1","12 ve 12"],0,"A·B = 12 − 12 = 0; |A×B| = |3·(−3) − 4·4| = 25 (vektörler dik)."],
+["q = 1 C, v = 3i m/s, B = 2j T için F = q v × B?",["6k N","6i N","−6k N","5k N"],0,"3i × 2j = 6k."]
+],
+kinematik:[
+["Gidip başlangıç noktasına dönen cismin yer değiştirmesi?",["Toplam yol kadar","Yarı yol kadar","0","Hıza bağlı"],2,"Yer değiştirme = son − ilk konum = 0; yol ise 0 değildir."],
+["100 m'yi 20 s'de giden cismin ortalama hızı?",["2 m/s","5 m/s","20 m/s","0,2 m/s"],1,"100/20 = 5 m/s."],
+["Gidişte 60 km/h, dönüşte 40 km/h hızla giden aracın ortalama sürati?",["50 km/h","48 km/h","100 km/h","0"],1,"2d/(d/60 + d/40) = 48 km/h. Ortalama hız 0'dır."],
+["Konum-zaman grafiğinin eğimi neyi verir?",["İvme","Hız","Yol","Kuvvet"],1,"x-t eğimi anlık hızdır."],
+["Hız-zaman grafiğinin altında kalan alan neyi verir?",["İvme","Yer değiştirme","Sürat","Kuvvet"],1,"v-t alanı = yer değiştirme; eğim = ivme."],
+["v = +5 m/s ve a = −2 m/s² ise cisim?",["Hızlanır","Yavaşlar","Sabit hızlıdır","Durur"],1,"v ve a zıt işaretli → yavaşlar."],
+["v₀ = 5 m/s, a = 2 m/s², 4 s sonra hız?",["13 m/s","9 m/s","8 m/s","20 m/s"],0,"v = 5 + 2·4 = 13 m/s."],
+["Aynı hareketin yer değiştirmesi?",["36 m","20 m","16 m","52 m"],0,"Δx = 5·4 + ½·2·16 = 36 m."],
+["Durgun cisim 3 m/s² ile 6 s hızlanıyor. Yer değiştirme?",["18 m","54 m","36 m","108 m"],1,"½·3·36 = 54 m (hız 18 m/s)."],
+["v₀ = 20 m/s, a = −4 m/s² ile duruncaya kadar alınan yol?",["50 m","100 m","25 m","5 m"],0,"Δx = (0 − 400)/(−8) = 50 m (süre 5 s)."],
+["Zaman verilmeyip yer değiştirme isteniyorsa hangi denklem uygundur?",["v = v₀ + at","v² = v₀² + 2aΔx","x = x₀ + v₀t + ½at²","Δx = ½(v₀+v)t"],1,"t yoksa: v² = v₀² + 2aΔx."],
+["A aracı 20 m/s sabit gidiyor; B aynı yerden durgun başlayıp 2 m/s² ile hızlanıyor. B, A'ya kaç s sonra yetişir?",["10 s","20 s","40 s","5 s"],1,"20t = t² → t = 20 s; x = 400 m, B'nin hızı 40 m/s."],
+["45 m yükseklikten bırakılan taş (g = 10) kaç s'de yere çarpar?",["2 s","3 s","4,5 s","9 s"],1,"t = √(2h/g) = √9 = 3 s."],
+["30 m/s ile yukarı atılan cismin (g = 10) çıkabileceği maksimum yükseklik?",["30 m","45 m","90 m","60 m"],1,"h = v₀²/2g = 900/20 = 45 m; tepe 3 s, havada kalma 6 s."],
+["20 m/s ile yukarı atılan top (g = 10) hangi zamanlarda 15 m yüksekliktedir?",["1 s ve 3 s","2 s ve 4 s","1 s ve 4 s","3 s"],0,"15 = 20t − 5t² → t² − 4t + 3 = 0 → t = 1, 3."],
+["Durgun cisim 2 m/s² ile 10 s hızlanıp 5 s sabit hızla gidiyor. Toplam yer değiştirme?",["100 m","150 m","200 m","250 m"],2,"İlk 10 s: 100 m (v = 20); sonra 20·5 = 100 m → 200 m."],
+["Koşucu 200 m'yi 25 s'de koşuyor. Ortalama sürat?",["8 m/s","5 m/s","25 m/s","0,125 m/s"],0,"200/25 = 8 m/s."],
+["Yukarı atılan cismin tepe noktasında hangisi doğrudur?",["v = 0, a = 0","v = 0, a = g (aşağı)","v = max","a = 0"],1,"Tepede hız sıfırdır ama ivme g'dir (aşağı)."]
+]};
+
+const FORMULS=[
+["Yoğunluk","ρ = m/V"],["Atom kütlesi","m = molar kütle / N_A (N_A = 6,022×10²³)"],["km/h → m/s","÷ 3,6"],
+["Bileşenler","A_x = A cosθ, A_y = A sinθ, A = √(A_x²+A_y²), tanθ = A_y/A_x"],
+["Birim vektör","â = A/|A|"],["Bileşke","R_x = A_x+B_x, R_y = A_y+B_y"],
+["Nokta çarpım","A·B = AB cosθ = A_xB_x + A_yB_y + A_zB_z"],["Açı","cosθ = A·B / (|A||B|)"],
+["Çapraz çarpım","|A×B| = AB sinθ; i×j=k, j×k=i, k×i=j; A×B = −B×A"],
+["İş / Güç / Tork","W = F·d; P = F·v; τ = r×F; F = q v×B"],
+["Hız / ivme","v_ort = Δx/Δt; a = Δv/Δt"],
+["Sabit ivme","v = v₀+at; x = x₀+v₀t+½at²; v² = v₀²+2aΔx; Δx = ½(v₀+v)t"],
+["Serbest düşme","t = √(2h/g); v = gt; yukarı atış: h = v₀²/2g, kalış süresi 2v₀/g; g ≈ 9,8 (≈10) m/s²"]
+];
+
+/* ===== UYGULAMA ===== */
+const app=document.getElementById("app");
+let S={};try{S=JSON.parse(localStorage.getItem("tf")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("tf",JSON.stringify(S))}catch(e){}}
+let view={t:"home"};
+function go(v){view=v;render();window.scrollTo(0,0)}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function setNav(){const m={home:"nHome",topic:"nHome",quiz:"nQuiz",form:"nForm"};
+ ["nHome","nQuiz","nForm"].forEach(id=>document.getElementById(id).className=(m[view.t]===id?"on":""))}
+nHome.onclick=()=>go({t:"home"});nQuiz.onclick=()=>go({t:"quiz",set:"all"});nForm.onclick=()=>go({t:"form"});
+
+function home(){
+ let h=`<h1>Temel Fizik</h1><p class="sub">Bir konu seç, özeti oku, testini çöz.</p><div class="grid">`;
+ TOPICS.forEach((t,i)=>{const best=S["b_"+t.id];
+  h+=`<button class="card" data-t="${t.id}"><div class="ic">${i+1}</div><div class="tx"><b>${t.t}</b><small>${best!=null?"Test: %"+best:Q[t.id].length+" soru"}</small></div><span class="go">›</span></button>`});
+ app.innerHTML=h+"</div>";
+ app.querySelectorAll(".card").forEach(b=>b.onclick=()=>go({t:"topic",id:b.dataset.t}))}
+
+function topic(){
+ const t=TOPICS.find(x=>x.id===view.id);
+ let h=`<div class="top"><button class="crumb" id="back">‹ Konular</button></div><h2>${t.t}</h2><p class="sub">${t.sub}</p>`;
+ for(const [ti,body] of t.s)h+=`<div class="pt"><h3>${ti}</h3>${body}</div>`;
+ h+=`<div class="label">Aklında kalsın</div><div class="chips">${t.k.map(k=>`<span class="chip">${k}</span>`).join("")}</div>
+ <div class="row"><button class="btn" id="tq">Bu konunun testini çöz (${Q[t.id].length} soru)</button></div>`;
+ app.innerHTML=h;back.onclick=()=>go({t:"home"});tq.onclick=()=>go({t:"quiz",set:t.id})}
+
+let run=null;
+function startRun(set){
+ let pool=set==="all"?Object.values(Q).flatMap((a,i)=>a.map(q=>q.concat(Object.keys(Q)[i]))):Q[set].map(q=>q.concat(set));
+ pool=shuffle(pool);if(set==="all")pool=pool.slice(0,20);
+ run={set,qs:pool,ans:{},i:0}}
+function quiz(){
+ if(!run||run.set!==view.set)startRun(view.set);
+ const title=view.set==="all"?"Karışık test (20 soru)":TOPICS.find(x=>x.id===view.set).t;
+ const r=run;
+ if(r.i>=r.qs.length){
+  const ok=Object.values(r.ans).filter(x=>x.ok).length,pct=Math.round(ok/r.qs.length*100);
+  S["b_"+(r.set==="all"?"all":r.set)]=Math.max(pct,S["b_"+(r.set==="all"?"all":r.set)]||0);save();
+  let h=`<h2>${title}</h2><div class="res"><div class="score">${ok} / ${r.qs.length}</div><div>%${pct} doğru</div></div>`;
+  const wrong=r.qs.map((q,i)=>[q,i]).filter(([q,i])=>!r.ans[i].ok);
+  if(wrong.length){h+=`<div class="label">Yanlışların</div>`;for(const [q] of wrong)h+=`<div class="pt"><b>${q[0]}</b><br>Doğru: ${q[1][q[2]]}<div class="exp" style="display:block">${q[3]}</div></div>`}
+  h+=`<div class="row"><button class="btn" id="again">Tekrar çöz</button><button class="btn ghost" id="hm">Konulara dön</button></div>`;
+  app.innerHTML=h;again.onclick=()=>{run=null;render()};hm.onclick=()=>go({t:"home"});return}
+ const q=r.qs[r.i];
+ if(!q._o)q._o=shuffle(q[1].map((x,k)=>[x,k]));
+ let h=`<h2>${title}</h2><p class="sub">Soru ${r.i+1} / ${r.qs.length}</p><div class="qa" id="qa"><div class="qt">${q[0]}</div>`;
+ q._o.forEach(([x,k],j)=>h+=`<button class="opt" data-k="${k}">${x}</button>`);
+ h+=`<div class="exp">${q[3]}</div></div><div class="row"><button class="btn" id="nx" style="display:none">${r.i<r.qs.length-1?"Sonraki ›":"Sonucu gör"}</button></div>`;
+ app.innerHTML=h;
+ app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  if(qa.classList.contains("done"))return;
+  const k=+b.dataset.k,ok=k===q[2];r.ans[r.i]={ok};
+  qa.classList.add("done");
+  app.querySelectorAll(".opt").forEach(o=>{if(+o.dataset.k===q[2])o.classList.add("ok")});
+  if(!ok)b.classList.add("bad");
+  nx.style.display="block";nx.scrollIntoView({block:"nearest"})});
+ nx.onclick=()=>{r.i++;render();window.scrollTo(0,0)}}
+
+function form(){
+ let h=`<h1>Formül kağıdı</h1><p class="sub">Sınavdan önce hızlı bakış.</p>`;
+ for(const [a,b] of FORMULS)h+=`<div class="pt"><b>${a}</b><div class="f">${b}</div></div>`;
+ h+=`<h2 style="margin-top:28px">Hesaplayıcı</h2><div id="tl"></div>`;
+ app.innerHTML=h;tool(document.getElementById("tl"))}
+
+function num(id){const v=parseFloat(String(document.getElementById(id).value).replace(",","."));return isNaN(v)?0:v}
+const fm=x=>(Math.round(x*1e4)/1e4).toString().replace(".",",");
+function vs(v){return `${fm(v[0])}i ${v[1]<0?"−":"+"} ${fm(Math.abs(v[1]))}j ${v[2]<0?"−":"+"} ${fm(Math.abs(v[2]))}k`}
+function tool(host){
+ let h=`<p class="sub">Vektör: A ve B bileşenlerini gir (2 boyutta z = 0 bırak).</p>
+ <div class="label">A</div><div class="inp"><div><label>x</label><input id="ax" inputmode="decimal" value="2"></div><div><label>y</label><input id="ay" inputmode="decimal" value="3"></div><div><label>z</label><input id="az" inputmode="decimal" value="0"></div></div>
+ <div class="label">B</div><div class="inp"><div><label>x</label><input id="bx" inputmode="decimal" value="4"></div><div><label>y</label><input id="by" inputmode="decimal" value="-1"></div><div><label>z</label><input id="bz" inputmode="decimal" value="0"></div></div>
+ <div class="res" id="out"></div>
+ <div class="label">Kinematik: sabit ivme</div><p class="sub">v₀, a, t gir → v ve Δx.</p>
+ <div class="inp"><div><label>v₀ (m/s)</label><input id="kv" inputmode="decimal" value="5"></div><div><label>a (m/s²)</label><input id="ka" inputmode="decimal" value="2"></div><div><label>t (s)</label><input id="kt" inputmode="decimal" value="4"></div></div>
+ <div class="res" id="kout"></div>`;
+ host.innerHTML=h;
+ const calc=()=>{
+  const A=[num("ax"),num("ay"),num("az")],B=[num("bx"),num("by"),num("bz")];
+  const mag=v=>Math.hypot(v[0],v[1],v[2]),dot=A[0]*B[0]+A[1]*B[1]+A[2]*B[2];
+  const cr=[A[1]*B[2]-A[2]*B[1],A[2]*B[0]-A[0]*B[2],A[0]*B[1]-A[1]*B[0]];
+  const ang=(mag(A)&&mag(B))?Math.acos(Math.max(-1,Math.min(1,dot/(mag(A)*mag(B)))))*180/Math.PI:null;
+  out.innerHTML=`<div><b>A + B</b> = ${vs([A[0]+B[0],A[1]+B[1],A[2]+B[2]])}</div><div><b>A − B</b> = ${vs([A[0]-B[0],A[1]-B[1],A[2]-B[2]])}</div><div><b>|A|</b> = ${fm(mag(A))} &nbsp; <b>|B|</b> = ${fm(mag(B))} &nbsp; <b>|A+B|</b> = ${fm(mag([A[0]+B[0],A[1]+B[1],A[2]+B[2]]))}</div><div><b>A · B</b> = ${fm(dot)}</div><div><b>A × B</b> = ${vs(cr)} &nbsp; (|A×B| = ${fm(mag(cr))})</div><div><b>Aralarındaki açı</b> = ${ang==null?"tanımsız":fm(ang)+"°"}</div>`;
+  const v0=num("kv"),a=num("ka"),t=num("kt");
+  kout.innerHTML=`<div><b>v</b> = v₀ + at = ${fm(v0+a*t)} m/s</div><div><b>Δx</b> = v₀t + ½at² = ${fm(v0*t+0.5*a*t*t)} m</div>`};
+ host.querySelectorAll("input").forEach(i=>i.oninput=calc);calc()}
+
+function render(){setNav();({home,topic,quiz,form})[view.t]()}
+render();
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script>
+</body>
+</html>
